@@ -434,8 +434,8 @@ function App() {
   return (
     <div className="min-h-screen bg-white w-screen max-w-full">
       {/* Header */}
-      <header className="bg-slate-800 text-white px-4 py-4 w-full" style={{ paddingLeft: 'max(1rem, env(safe-area-inset-left))', paddingRight: 'max(1rem, env(safe-area-inset-right))' }}>
-        <div className="max-w-2xl mx-auto flex items-center justify-between">
+      <header className="bg-slate-800 text-white py-4 w-full">
+        <div className="max-w-2xl mx-auto flex items-center justify-between px-4 sm:px-6">
           <h1 
             className="font-medium uppercase"
             style={{ letterSpacing: '1px', fontSize: '18px' }}
