@@ -20,6 +20,7 @@ const AVAILABLE_CITIES = [
   { city: 'Madrid', country: 'ES', timezone: 'Europe/Madrid', abbr: 'MAD' },
   { city: 'Dublin', country: 'IE', timezone: 'Europe/Dublin', abbr: 'DUB' },
   { city: 'Lisbon', country: 'PT', timezone: 'Europe/Lisbon', abbr: 'LIS' },
+  { city: 'India', country: 'IN', timezone: 'Asia/Kolkata', abbr: 'IND' },
   { city: 'Mumbai', country: 'IN', timezone: 'Asia/Kolkata', abbr: 'BOM' },
   { city: 'Delhi', country: 'IN', timezone: 'Asia/Kolkata', abbr: 'DEL' },
   { city: 'Bangalore', country: 'IN', timezone: 'Asia/Kolkata', abbr: 'BLR' },
@@ -56,8 +57,45 @@ const DEFAULT_TIMEZONES = [
 // LocalStorage key
 const STORAGE_KEY = 'timezone-converter-locations'
 
-// Load timezones from localStorage or use defaults
+// Parse URL parameters for timezone zones
+function getTimezonesFromURL() {
+  const params = new URLSearchParams(window.location.search)
+  const zonesParam = params.get('zones')
+  
+  if (!zonesParam) return null
+  
+  const abbrs = zonesParam.split(',').map(s => s.trim().toUpperCase())
+  const timezones = []
+  
+  for (const abbr of abbrs) {
+    const city = AVAILABLE_CITIES.find(c => c.abbr.toUpperCase() === abbr)
+    if (city) {
+      timezones.push({
+        id: `${city.abbr.toLowerCase()}-${Date.now()}-${Math.random()}`,
+        abbreviation: city.abbr,
+        timezone: city.timezone,
+      })
+    }
+  }
+  
+  return timezones.length > 0 ? timezones : null
+}
+
+// Update URL with current timezone selections
+function updateURL(timezones) {
+  const abbrs = timezones.map(tz => tz.abbreviation).join(',')
+  const url = new URL(window.location.href)
+  url.searchParams.set('zones', abbrs)
+  window.history.replaceState({}, '', url)
+}
+
+// Load timezones from URL, then localStorage, then defaults
 function loadTimezones() {
+  // First check URL
+  const fromURL = getTimezonesFromURL()
+  if (fromURL) return fromURL
+  
+  // Then check localStorage
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
     if (saved) {
@@ -342,9 +380,10 @@ function App() {
   const [addingId, setAddingId] = useState(null)
   const localTimezone = DateTime.local().zoneName
   
-  // Save to localStorage whenever timezones change
+  // Save to localStorage and update URL whenever timezones change
   useEffect(() => {
     saveTimezones(timezones)
+    updateURL(timezones)
   }, [timezones])
   
   // Add a new timezone with animation
