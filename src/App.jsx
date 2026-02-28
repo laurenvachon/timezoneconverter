@@ -432,9 +432,9 @@ function App() {
   const currentTimeFormatted = formatTime(centralTime, localTimezone)
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white w-screen max-w-full">
       {/* Header */}
-      <header className="bg-slate-800 text-white px-4 py-4">
+      <header className="bg-slate-800 text-white px-4 py-4 w-full" style={{ paddingLeft: 'max(1rem, env(safe-area-inset-left))', paddingRight: 'max(1rem, env(safe-area-inset-right))' }}>
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <h1 
             className="font-medium uppercase"
@@ -444,16 +444,17 @@ function App() {
           </h1>
           <button
             onClick={resetToNow}
-            className="flex items-center gap-2 px-3 py-2 hover:bg-slate-700 rounded-lg transition-colors text-sm font-medium"
+            className="flex items-center gap-2 px-3 py-2 hover:bg-slate-700 rounded-lg transition-colors text-sm font-medium whitespace-nowrap"
           >
-            <RotateCcw className="w-4 h-4" />
-            Reset to current time
+            <RotateCcw className="w-4 h-4 flex-shrink-0" />
+            <span className="sm:hidden">Reset</span>
+            <span className="hidden sm:inline">Reset to current time</span>
           </button>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-2xl mx-auto py-6">
+      <main className="max-w-2xl mx-auto py-6 px-4 sm:px-6">
         {/* Time Slider */}
         <div className="mb-8">
           <div className="relative pt-7">
