@@ -286,23 +286,27 @@ function EditableTimePill({ time, timezone, isDay, onTimeChange }) {
     }
   }
   
-  if (isEditing) {
-    return (
-      <div
-        className={`
-          w-48 flex items-center justify-center gap-2 px-5 py-3 rounded-full
-          ring-2 ring-offset-2
-          ${isDay 
-            ? 'bg-amber-400 text-amber-900 ring-slate-800' 
-            : 'bg-slate-700 text-white ring-white'
-          }
-        `}
-      >
-        {isDay ? (
-          <Sun className="w-6 h-6 flex-shrink-0" />
-        ) : (
-          <Moon className="w-6 h-6 flex-shrink-0" />
-        )}
+  return (
+    <div
+      onClick={!isEditing ? handleClick : undefined}
+      style={{ fontSize: '1.25em' }}
+      className={`
+        group w-48 flex items-center justify-center gap-2 px-5 py-3 rounded-full font-medium
+        transition-colors
+        ${!isEditing ? 'cursor-pointer' : ''}
+        ${isDay 
+          ? `bg-amber-400 text-amber-900 ${!isEditing ? 'hover:bg-amber-300' : ''}` 
+          : `bg-slate-700 text-white ${!isEditing ? 'hover:bg-slate-600' : ''}`
+        }
+      `}
+    >
+      {isDay ? (
+        <Sun className={`w-6 h-6 flex-shrink-0 transition-transform duration-300 ease-out ${!isEditing ? 'group-hover:scale-110 group-hover:rotate-[20deg]' : ''}`} />
+      ) : (
+        <Moon className={`w-6 h-6 flex-shrink-0 transition-transform duration-300 ease-out ${!isEditing ? 'group-hover:scale-110 group-hover:rotate-[20deg]' : ''}`} />
+      )}
+      
+      {isEditing ? (
         <input
           ref={inputRef}
           type="text"
@@ -310,39 +314,16 @@ function EditableTimePill({ time, timezone, isDay, onTimeChange }) {
           onChange={(e) => setInputValue(e.target.value)}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
-          style={{ 
-            fontSize: '1.25em',
-            backgroundColor: isDay ? '#ffd568' : '#1e293b'
-          }}
+          style={{ backgroundColor: isDay ? '#ffd568' : '#1e293b' }}
           className={`
             w-[6.5rem] font-medium outline-none text-center rounded px-1
             ${isDay ? 'text-amber-900' : 'text-white'}
           `}
         />
-      </div>
-    )
-  }
-  
-  return (
-    <button
-      onClick={handleClick}
-      style={{ fontSize: '1.25em' }}
-      className={`
-        w-48 flex items-center justify-center gap-2 px-5 py-3 rounded-full font-medium
-        cursor-pointer transition-transform hover:scale-105 active:scale-95
-        ${isDay 
-          ? 'bg-amber-400 text-amber-900 hover:bg-amber-300' 
-          : 'bg-slate-700 text-white hover:bg-slate-600'
-        }
-      `}
-    >
-      {isDay ? (
-        <Sun className="w-6 h-6 flex-shrink-0" />
       ) : (
-        <Moon className="w-6 h-6 flex-shrink-0" />
+        <span className="w-[6.5rem] text-center">{timeStr}</span>
       )}
-      <span className="w-[6.5rem] text-center">{timeStr}</span>
-    </button>
+    </div>
   )
 }
 
@@ -438,12 +419,12 @@ function App() {
         <div className="mb-8">
           <div className="relative pt-7">
             {/* Static Labels */}
-            <div className="absolute top-0 left-0 text-sm text-slate-400 transition-opacity duration-200"
+            <div className="absolute top-0 left-0 text-sm text-slate-500 transition-opacity duration-200"
               style={{ opacity: Math.max(0, Math.min(1, (sliderValue - 180) / 120)) }}
             >
               12:00 AM
             </div>
-            <div className="absolute top-0 right-0 text-sm text-slate-400 transition-opacity duration-200"
+            <div className="absolute top-0 right-0 text-sm text-slate-500 transition-opacity duration-200"
               style={{ opacity: Math.max(0, Math.min(1, (1439 - sliderValue - 180) / 120)) }}
             >
               11:59 PM
@@ -550,7 +531,7 @@ function App() {
       
       {/* Footer */}
       <footer className="max-w-2xl mx-auto px-4 py-6">
-        <p className="text-center text-slate-300 text-xs">
+        <p className="text-center text-slate-500 text-xs">
           Created by Lauren Vachon using Cursor
         </p>
       </footer>
