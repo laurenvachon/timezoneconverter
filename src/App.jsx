@@ -4,46 +4,120 @@ import { Sun, Moon, RotateCcw, Plus, X, Search, Minus } from 'lucide-react'
 
 // Available cities to search from
 const AVAILABLE_CITIES = [
-  { city: 'New York', country: 'US', timezone: 'America/New_York', abbr: 'NYC' },
-  { city: 'Los Angeles', country: 'US', timezone: 'America/Los_Angeles', abbr: 'LA' },
-  { city: 'San Francisco', country: 'US', timezone: 'America/Los_Angeles', abbr: 'SF' },
-  { city: 'Chicago', country: 'US', timezone: 'America/Chicago', abbr: 'CHI' },
-  { city: 'Boston', country: 'US', timezone: 'America/New_York', abbr: 'BOS' },
-  { city: 'Seattle', country: 'US', timezone: 'America/Los_Angeles', abbr: 'SEA' },
-  { city: 'Denver', country: 'US', timezone: 'America/Denver', abbr: 'DEN' },
-  { city: 'Miami', country: 'US', timezone: 'America/New_York', abbr: 'MIA' },
-  { city: 'London', country: 'GB', timezone: 'Europe/London', abbr: 'LON' },
-  { city: 'Paris', country: 'FR', timezone: 'Europe/Paris', abbr: 'PAR' },
-  { city: 'Berlin', country: 'DE', timezone: 'Europe/Berlin', abbr: 'BER' },
-  { city: 'Amsterdam', country: 'NL', timezone: 'Europe/Amsterdam', abbr: 'AMS' },
-  { city: 'Rome', country: 'IT', timezone: 'Europe/Rome', abbr: 'ROM' },
-  { city: 'Madrid', country: 'ES', timezone: 'Europe/Madrid', abbr: 'MAD' },
-  { city: 'Dublin', country: 'IE', timezone: 'Europe/Dublin', abbr: 'DUB' },
-  { city: 'Lisbon', country: 'PT', timezone: 'Europe/Lisbon', abbr: 'LIS' },
-  { city: 'India', country: 'IN', timezone: 'Asia/Kolkata', abbr: 'IND' },
-  { city: 'Mumbai', country: 'IN', timezone: 'Asia/Kolkata', abbr: 'BOM' },
-  { city: 'Delhi', country: 'IN', timezone: 'Asia/Kolkata', abbr: 'DEL' },
-  { city: 'Bangalore', country: 'IN', timezone: 'Asia/Kolkata', abbr: 'BLR' },
-  { city: 'Tokyo', country: 'JP', timezone: 'Asia/Tokyo', abbr: 'TYO' },
-  { city: 'Singapore', country: 'SG', timezone: 'Asia/Singapore', abbr: 'SIN' },
-  { city: 'Hong Kong', country: 'HK', timezone: 'Asia/Hong_Kong', abbr: 'HKG' },
-  { city: 'Shanghai', country: 'CN', timezone: 'Asia/Shanghai', abbr: 'SHA' },
-  { city: 'Beijing', country: 'CN', timezone: 'Asia/Shanghai', abbr: 'BJS' },
-  { city: 'Seoul', country: 'KR', timezone: 'Asia/Seoul', abbr: 'SEL' },
-  { city: 'Sydney', country: 'AU', timezone: 'Australia/Sydney', abbr: 'SYD' },
-  { city: 'Melbourne', country: 'AU', timezone: 'Australia/Melbourne', abbr: 'MEL' },
-  { city: 'Auckland', country: 'NZ', timezone: 'Pacific/Auckland', abbr: 'AKL' },
-  { city: 'Dubai', country: 'AE', timezone: 'Asia/Dubai', abbr: 'DXB' },
-  { city: 'Tel Aviv', country: 'IL', timezone: 'Asia/Jerusalem', abbr: 'TLV' },
-  { city: 'São Paulo', country: 'BR', timezone: 'America/Sao_Paulo', abbr: 'SAO' },
-  { city: 'Mexico City', country: 'MX', timezone: 'America/Mexico_City', abbr: 'MEX' },
-  { city: 'Toronto', country: 'CA', timezone: 'America/Toronto', abbr: 'YYZ' },
-  { city: 'Vancouver', country: 'CA', timezone: 'America/Vancouver', abbr: 'YVR' },
-  { city: 'Moscow', country: 'RU', timezone: 'Europe/Moscow', abbr: 'MOW' },
-  { city: 'Istanbul', country: 'TR', timezone: 'Europe/Istanbul', abbr: 'IST' },
-  { city: 'Cairo', country: 'EG', timezone: 'Africa/Cairo', abbr: 'CAI' },
-  { city: 'Lagos', country: 'NG', timezone: 'Africa/Lagos', abbr: 'LOS' },
-  { city: 'Johannesburg', country: 'ZA', timezone: 'Africa/Johannesburg', abbr: 'JNB' },
+  // United States
+  { city: 'New York', state: 'NY', country: 'US', timezone: 'America/New_York', abbr: 'NYC' },
+  { city: 'Los Angeles', state: 'CA', country: 'US', timezone: 'America/Los_Angeles', abbr: 'LA' },
+  { city: 'San Francisco', state: 'CA', country: 'US', timezone: 'America/Los_Angeles', abbr: 'SF' },
+  { city: 'Chicago', state: 'IL', country: 'US', timezone: 'America/Chicago', abbr: 'CHI' },
+  { city: 'Boston', state: 'MA', country: 'US', timezone: 'America/New_York', abbr: 'BOS' },
+  { city: 'Seattle', state: 'WA', country: 'US', timezone: 'America/Los_Angeles', abbr: 'SEA' },
+  { city: 'Denver', state: 'CO', country: 'US', timezone: 'America/Denver', abbr: 'DEN' },
+  { city: 'Miami', state: 'FL', country: 'US', timezone: 'America/New_York', abbr: 'MIA' },
+  { city: 'Austin', state: 'TX', country: 'US', timezone: 'America/Chicago', abbr: 'AUS' },
+  { city: 'Dallas', state: 'TX', country: 'US', timezone: 'America/Chicago', abbr: 'DFW' },
+  { city: 'Houston', state: 'TX', country: 'US', timezone: 'America/Chicago', abbr: 'HOU' },
+  { city: 'Phoenix', state: 'AZ', country: 'US', timezone: 'America/Phoenix', abbr: 'PHX' },
+  { city: 'Atlanta', state: 'GA', country: 'US', timezone: 'America/New_York', abbr: 'ATL' },
+  { city: 'Philadelphia', state: 'PA', country: 'US', timezone: 'America/New_York', abbr: 'PHL' },
+  { city: 'Washington', state: 'DC', country: 'US', timezone: 'America/New_York', abbr: 'DCA' },
+  { city: 'Las Vegas', state: 'NV', country: 'US', timezone: 'America/Los_Angeles', abbr: 'LAS' },
+  { city: 'San Diego', state: 'CA', country: 'US', timezone: 'America/Los_Angeles', abbr: 'SAN' },
+  { city: 'Portland', state: 'OR', country: 'US', timezone: 'America/Los_Angeles', abbr: 'PDX' },
+  { city: 'Minneapolis', state: 'MN', country: 'US', timezone: 'America/Chicago', abbr: 'MSP' },
+  { city: 'Detroit', state: 'MI', country: 'US', timezone: 'America/Detroit', abbr: 'DTW' },
+  { city: 'Salt Lake City', state: 'UT', country: 'US', timezone: 'America/Denver', abbr: 'SLC' },
+  { city: 'Nashville', state: 'TN', country: 'US', timezone: 'America/Chicago', abbr: 'BNA' },
+  { city: 'Charlotte', state: 'NC', country: 'US', timezone: 'America/New_York', abbr: 'CLT' },
+  { city: 'Raleigh', state: 'NC', country: 'US', timezone: 'America/New_York', abbr: 'RDU' },
+  { city: 'Orlando', state: 'FL', country: 'US', timezone: 'America/New_York', abbr: 'MCO' },
+  { city: 'Tampa', state: 'FL', country: 'US', timezone: 'America/New_York', abbr: 'TPA' },
+  { city: 'Honolulu', state: 'HI', country: 'US', timezone: 'Pacific/Honolulu', abbr: 'HNL' },
+  { city: 'Anchorage', state: 'AK', country: 'US', timezone: 'America/Anchorage', abbr: 'ANC' },
+  // Canada
+  { city: 'Toronto', state: 'ON', country: 'CA', timezone: 'America/Toronto', abbr: 'YYZ' },
+  { city: 'Vancouver', state: 'BC', country: 'CA', timezone: 'America/Vancouver', abbr: 'YVR' },
+  { city: 'Montreal', state: 'QC', country: 'CA', timezone: 'America/Toronto', abbr: 'YUL' },
+  { city: 'Calgary', state: 'AB', country: 'CA', timezone: 'America/Edmonton', abbr: 'YYC' },
+  { city: 'Edmonton', state: 'AB', country: 'CA', timezone: 'America/Edmonton', abbr: 'YEG' },
+  { city: 'Ottawa', state: 'ON', country: 'CA', timezone: 'America/Toronto', abbr: 'YOW' },
+  // Europe
+  { city: 'London', country: 'UK', timezone: 'Europe/London', abbr: 'LON' },
+  { city: 'Paris', country: 'France', timezone: 'Europe/Paris', abbr: 'PAR' },
+  { city: 'Berlin', country: 'Germany', timezone: 'Europe/Berlin', abbr: 'BER' },
+  { city: 'Amsterdam', country: 'Netherlands', timezone: 'Europe/Amsterdam', abbr: 'AMS' },
+  { city: 'Rome', country: 'Italy', timezone: 'Europe/Rome', abbr: 'ROM' },
+  { city: 'Madrid', country: 'Spain', timezone: 'Europe/Madrid', abbr: 'MAD' },
+  { city: 'Barcelona', country: 'Spain', timezone: 'Europe/Madrid', abbr: 'BCN' },
+  { city: 'Dublin', country: 'Ireland', timezone: 'Europe/Dublin', abbr: 'DUB' },
+  { city: 'Lisbon', country: 'Portugal', timezone: 'Europe/Lisbon', abbr: 'LIS' },
+  { city: 'Vienna', country: 'Austria', timezone: 'Europe/Vienna', abbr: 'VIE' },
+  { city: 'Zurich', country: 'Switzerland', timezone: 'Europe/Zurich', abbr: 'ZRH' },
+  { city: 'Geneva', country: 'Switzerland', timezone: 'Europe/Zurich', abbr: 'GVA' },
+  { city: 'Brussels', country: 'Belgium', timezone: 'Europe/Brussels', abbr: 'BRU' },
+  { city: 'Stockholm', country: 'Sweden', timezone: 'Europe/Stockholm', abbr: 'ARN' },
+  { city: 'Copenhagen', country: 'Denmark', timezone: 'Europe/Copenhagen', abbr: 'CPH' },
+  { city: 'Oslo', country: 'Norway', timezone: 'Europe/Oslo', abbr: 'OSL' },
+  { city: 'Helsinki', country: 'Finland', timezone: 'Europe/Helsinki', abbr: 'HEL' },
+  { city: 'Prague', country: 'Czech Republic', timezone: 'Europe/Prague', abbr: 'PRG' },
+  { city: 'Warsaw', country: 'Poland', timezone: 'Europe/Warsaw', abbr: 'WAW' },
+  { city: 'Budapest', country: 'Hungary', timezone: 'Europe/Budapest', abbr: 'BUD' },
+  { city: 'Athens', country: 'Greece', timezone: 'Europe/Athens', abbr: 'ATH' },
+  { city: 'Moscow', country: 'Russia', timezone: 'Europe/Moscow', abbr: 'MOW' },
+  { city: 'Istanbul', country: 'Turkey', timezone: 'Europe/Istanbul', abbr: 'IST' },
+  // India
+  { city: 'India', country: 'India', timezone: 'Asia/Kolkata', abbr: 'IND' },
+  { city: 'Mumbai', country: 'India', timezone: 'Asia/Kolkata', abbr: 'BOM' },
+  { city: 'Delhi', country: 'India', timezone: 'Asia/Kolkata', abbr: 'DEL' },
+  { city: 'Bangalore', country: 'India', timezone: 'Asia/Kolkata', abbr: 'BLR' },
+  { city: 'Chennai', country: 'India', timezone: 'Asia/Kolkata', abbr: 'MAA' },
+  { city: 'Hyderabad', country: 'India', timezone: 'Asia/Kolkata', abbr: 'HYD' },
+  { city: 'Kolkata', country: 'India', timezone: 'Asia/Kolkata', abbr: 'CCU' },
+  { city: 'Pune', country: 'India', timezone: 'Asia/Kolkata', abbr: 'PNQ' },
+  // Asia Pacific
+  { city: 'Tokyo', country: 'Japan', timezone: 'Asia/Tokyo', abbr: 'TYO' },
+  { city: 'Osaka', country: 'Japan', timezone: 'Asia/Tokyo', abbr: 'KIX' },
+  { city: 'Singapore', country: 'Singapore', timezone: 'Asia/Singapore', abbr: 'SIN' },
+  { city: 'Hong Kong', country: 'Hong Kong', timezone: 'Asia/Hong_Kong', abbr: 'HKG' },
+  { city: 'Shanghai', country: 'China', timezone: 'Asia/Shanghai', abbr: 'SHA' },
+  { city: 'Beijing', country: 'China', timezone: 'Asia/Shanghai', abbr: 'BJS' },
+  { city: 'Shenzhen', country: 'China', timezone: 'Asia/Shanghai', abbr: 'SZX' },
+  { city: 'Seoul', country: 'South Korea', timezone: 'Asia/Seoul', abbr: 'SEL' },
+  { city: 'Taipei', country: 'Taiwan', timezone: 'Asia/Taipei', abbr: 'TPE' },
+  { city: 'Bangkok', country: 'Thailand', timezone: 'Asia/Bangkok', abbr: 'BKK' },
+  { city: 'Kuala Lumpur', country: 'Malaysia', timezone: 'Asia/Kuala_Lumpur', abbr: 'KUL' },
+  { city: 'Jakarta', country: 'Indonesia', timezone: 'Asia/Jakarta', abbr: 'JKT' },
+  { city: 'Manila', country: 'Philippines', timezone: 'Asia/Manila', abbr: 'MNL' },
+  { city: 'Ho Chi Minh', country: 'Vietnam', timezone: 'Asia/Ho_Chi_Minh', abbr: 'SGN' },
+  { city: 'Hanoi', country: 'Vietnam', timezone: 'Asia/Ho_Chi_Minh', abbr: 'HAN' },
+  // Australia & New Zealand
+  { city: 'Sydney', state: 'NSW', country: 'AU', timezone: 'Australia/Sydney', abbr: 'SYD' },
+  { city: 'Melbourne', state: 'VIC', country: 'AU', timezone: 'Australia/Melbourne', abbr: 'MEL' },
+  { city: 'Brisbane', state: 'QLD', country: 'AU', timezone: 'Australia/Brisbane', abbr: 'BNE' },
+  { city: 'Perth', state: 'WA', country: 'AU', timezone: 'Australia/Perth', abbr: 'PER' },
+  { city: 'Auckland', country: 'New Zealand', timezone: 'Pacific/Auckland', abbr: 'AKL' },
+  { city: 'Wellington', country: 'New Zealand', timezone: 'Pacific/Auckland', abbr: 'WLG' },
+  // Middle East
+  { city: 'Dubai', country: 'UAE', timezone: 'Asia/Dubai', abbr: 'DXB' },
+  { city: 'Abu Dhabi', country: 'UAE', timezone: 'Asia/Dubai', abbr: 'AUH' },
+  { city: 'Tel Aviv', country: 'Israel', timezone: 'Asia/Jerusalem', abbr: 'TLV' },
+  { city: 'Jerusalem', country: 'Israel', timezone: 'Asia/Jerusalem', abbr: 'JRS' },
+  { city: 'Riyadh', country: 'Saudi Arabia', timezone: 'Asia/Riyadh', abbr: 'RUH' },
+  { city: 'Doha', country: 'Qatar', timezone: 'Asia/Qatar', abbr: 'DOH' },
+  // Latin America
+  { city: 'São Paulo', country: 'Brazil', timezone: 'America/Sao_Paulo', abbr: 'SAO' },
+  { city: 'Rio de Janeiro', country: 'Brazil', timezone: 'America/Sao_Paulo', abbr: 'GIG' },
+  { city: 'Mexico City', country: 'Mexico', timezone: 'America/Mexico_City', abbr: 'MEX' },
+  { city: 'Buenos Aires', country: 'Argentina', timezone: 'America/Argentina/Buenos_Aires', abbr: 'EZE' },
+  { city: 'Santiago', country: 'Chile', timezone: 'America/Santiago', abbr: 'SCL' },
+  { city: 'Lima', country: 'Peru', timezone: 'America/Lima', abbr: 'LIM' },
+  { city: 'Bogotá', country: 'Colombia', timezone: 'America/Bogota', abbr: 'BOG' },
+  // Africa
+  { city: 'Cairo', country: 'Egypt', timezone: 'Africa/Cairo', abbr: 'CAI' },
+  { city: 'Lagos', country: 'Nigeria', timezone: 'Africa/Lagos', abbr: 'LOS' },
+  { city: 'Johannesburg', country: 'South Africa', timezone: 'Africa/Johannesburg', abbr: 'JNB' },
+  { city: 'Cape Town', country: 'South Africa', timezone: 'Africa/Johannesburg', abbr: 'CPT' },
+  { city: 'Nairobi', country: 'Kenya', timezone: 'Africa/Nairobi', abbr: 'NBO' },
+  { city: 'Casablanca', country: 'Morocco', timezone: 'Africa/Casablanca', abbr: 'CMN' },
 ]
 
 // Default timezones
@@ -172,12 +246,20 @@ function CitySearchModal({ onSelect, onClose, existingTimezones }) {
     const matchesSearch = 
       city.city.toLowerCase().includes(searchLower) ||
       city.country.toLowerCase().includes(searchLower) ||
-      city.abbr.toLowerCase().includes(searchLower)
+      city.abbr.toLowerCase().includes(searchLower) ||
+      (city.state && city.state.toLowerCase().includes(searchLower))
     const notAlreadyAdded = !existingTimezones.some(
       tz => tz.timezone === city.timezone && tz.abbreviation === city.abbr
     )
     return matchesSearch && notAlreadyAdded
   }).slice(0, 8)
+  
+  const getLocationDisplay = (city) => {
+    if (city.state) {
+      return `${city.city}, ${city.state}`
+    }
+    return `${city.city}, ${city.country}`
+  }
   
   const handleSelect = (city) => {
     onSelect({
@@ -241,7 +323,7 @@ function CitySearchModal({ onSelect, onClose, existingTimezones }) {
                   >
                     <div className="flex items-center gap-3">
                       <span className="w-12 text-left font-semibold text-slate-700">{city.abbr}</span>
-                      <span className="text-slate-400 text-sm">{city.city}</span>
+                      <span className="text-slate-400 text-sm">{getLocationDisplay(city)}</span>
                     </div>
                     <div className={`
                       flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium
