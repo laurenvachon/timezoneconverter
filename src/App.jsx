@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { DateTime } from 'luxon'
-import { Sun, Moon, RotateCcw, Plus, X, Search, Minus } from 'lucide-react'
+import { Sun, Moon, RotateCcw, Plus, X, Search, Minus, Sparkles } from 'lucide-react'
 
 // Available cities to search from
 const AVAILABLE_CITIES = [
@@ -277,7 +277,7 @@ function CitySearchModal({ onSelect, onClose, existingTimezones }) {
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden animate-[fadeIn_0.2s_ease-out]"
+        className="bg-white rounded-lg shadow-2xl w-full max-w-sm overflow-hidden animate-[fadeIn_0.2s_ease-out]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -451,6 +451,150 @@ function EditableTimePill({ time, timezone, isDay, onTimeChange }) {
 function getMinutesSinceMidnight(isoString, timezone) {
   const dt = DateTime.fromISO(isoString, { zone: timezone })
   return dt.hour * 60 + dt.minute
+}
+
+// Custom working hours by timezone
+const CUSTOM_WORK_HOURS = {
+  'Asia/Kolkata': [
+    { start: 9, end: 16 },      // 9 AM - 4 PM IST
+    { start: 21, end: 23 },     // 9 PM - 11 PM IST (overlap with US)
+  ],
+  'Europe/London': [
+    { start: 9, end: 17.5 },    // 9 AM - 5:30 PM GMT
+  ],
+}
+
+// Default working hours for other timezones
+const DEFAULT_WORK_HOURS = [
+  { start: 9, end: 18 },        // 9 AM - 6 PM
+]
+
+// Check if a given hour is within working hours for a timezone
+function isInWorkHours(hour, timezone) {
+  const workPeriods = CUSTOM_WORK_HOURS[timezone] || DEFAULT_WORK_HOURS
+  return workPeriods.some(period => hour >= period.start && hour < period.end)
+}
+
+// Check if hour is in extended/reasonable hours (for partial scoring)
+function isInExtendedHours(hour, timezone) {
+  // For India, also consider 8 AM - 11 PM as reasonable
+  if (timezone === 'Asia/Kolkata') {
+    return hour >= 8 && hour < 23
+  }
+  // For others, 8 AM - 8 PM
+  return hour >= 8 && hour < 20
+}
+
+// Calculate optimal overlap for all timezones
+function calculateOptimalOverlap(timezones) {
+  if (timezones.length === 0) return null
+  
+  const now = DateTime.now()
+  // Round up to the next 15-minute mark
+  const minutesToNext15 = 15 - (now.minute % 15)
+  const startTime = now.plus({ minutes: minutesToNext15 }).set({ second: 0, millisecond: 0 })
+  
+  let bestSlot = null
+  let bestScore = -1
+  
+  // Check each 15-minute slot in the next 24 hours (on the hour, :15, :30, :45)
+  for (let minutesFromStart = 0; minutesFromStart < 24 * 60; minutesFromStart += 15) {
+    const checkTime = startTime.plus({ minutes: minutesFromStart })
+    const minutesFromNow = minutesToNext15 + minutesFromStart
+    let score = 0
+    let allInWorkHours = true
+    
+    for (const tz of timezones) {
+      const localTime = checkTime.setZone(tz.timezone)
+      const hour = localTime.hour + localTime.minute / 60
+      
+      if (isInWorkHours(hour, tz.timezone)) {
+        score += 2  // Full points for work hours
+      } else if (isInExtendedHours(hour, tz.timezone)) {
+        score += 1  // Partial points for extended hours
+        allInWorkHours = false
+      } else {
+        allInWorkHours = false
+      }
+    }
+    
+    // Prefer slots where all are in work hours, then by score
+    const effectiveScore = allInWorkHours ? score + 100 : score
+    
+    if (effectiveScore > bestScore) {
+      bestScore = effectiveScore
+      bestSlot = {
+        time: checkTime,
+        minutesFromNow,
+        allInWorkHours,
+        score
+      }
+    }
+  }
+  
+  return bestSlot
+}
+
+// Optimal Overlap Component
+function OptimalOverlap({ timezones, removingId, addingId }) {
+  if (timezones.length < 2) return null
+  
+  const overlap = calculateOptimalOverlap(timezones)
+  if (!overlap) return null
+  
+  const hoursFromNow = Math.round(overlap.minutesFromNow / 60)
+  const timeLabel = hoursFromNow === 0 
+    ? 'now' 
+    : hoursFromNow === 1 
+      ? 'in 1 hour' 
+      : `in ${hoursFromNow} hours`
+  
+  return (
+    <div className="bg-blue-50 rounded-lg p-5 mt-6 transition-all duration-300">
+      <div className="flex items-start gap-3">
+        <div className="w-8 h-8 bg-amber-400 rounded-lg flex items-center justify-center flex-shrink-0">
+          <Sparkles className="w-4 h-4 text-amber-900" />
+        </div>
+        <div className="flex-1">
+          <h3 className="font-semibold text-slate-800 mb-1">Optimal Overlap Found</h3>
+          <p className="text-slate-600 text-sm mb-3">
+            The most productive slot for all {timezones.length} locations is {timeLabel}.
+          </p>
+          <div className="flex flex-wrap -mr-2 -mb-2">
+            {timezones.map((tz) => {
+              const localTime = overlap.time.setZone(tz.timezone)
+              const timeStr = localTime.toFormat("h:mm a")
+              const isRemoving = removingId === tz.id
+              const isAdding = addingId === tz.id
+              const isAnimating = isRemoving || isAdding
+              
+              return (
+                <div 
+                  key={tz.id}
+                  style={{
+                    width: isAnimating ? '0px' : 'auto',
+                    marginRight: isAnimating ? '0px' : '0.5rem',
+                    marginBottom: isAnimating ? '0px' : '0.5rem',
+                  }}
+                  className="transition-all duration-300 ease-out overflow-hidden"
+                >
+                  <div 
+                    className={`
+                      bg-white px-3 py-1.5 rounded-full text-sm text-slate-700 font-medium whitespace-nowrap
+                      transition-opacity duration-300 ease-out
+                      ${isAnimating ? 'opacity-0' : 'opacity-100'}
+                    `}
+                  >
+                    {timeStr} ({tz.abbreviation})
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 // Main App Component
@@ -640,6 +784,9 @@ function App() {
             </button>
           </div>
         </div>
+        
+        {/* Optimal Overlap Insight */}
+        <OptimalOverlap timezones={timezones} removingId={removingId} addingId={addingId} />
         
         {/* Add Location Modal */}
         {showAddModal && (
